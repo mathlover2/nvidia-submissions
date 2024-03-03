@@ -1,0 +1,28 @@
+function make_substitutions(string,    f) {
+    f = gensub("\[\[", "\[\|", "g", string);
+    f = gensub("_", "-2", "g", f);
+    f = gensub("\]\]", "\|\]", "g", f);
+    f = gensub("\]\,", "\,", "g", f);
+    return f;
+}
+
+
+BEGIN {printing_flag = 0; problem_number = 1}
+
+/problem\(/ {
+    printing_flag = 1;
+    print make_substitutions($2);
+    next;
+}
+
+/\[[[:digit:]]+,[[:digit:]]+\]\)\./ {
+    print make_substitutions($1);
+    next;
+}
+
+( printing_flag == 1 ) {
+    print make_subsitutions($1);
+}
+
+
+
